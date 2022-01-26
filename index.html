@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body{
+                margin-left: 0px;
+                width: 1920px;
+                height: 998px;
+            }
+            #mainContainer{
+                width: 1920px;
+                height: 998px;
+                position: absolute;
+            
+            }
+            img{
+                max-width: 100%;
+                max-width: 100%
+            }
+
+            #myCanvas{
+            position: absolute;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="mainContainer">
+                <canvas id="myCanvas" width=1920 height=998 style="cursor:crosshair"></canvas>
+                <img src="\images\customsMap.PNG" alt="The map didn't load">
+                
+        </div>
+    
+
+        <script>
+          
+          function storeCooridnate(xValue, yValue, array){
+            array.push({x: xValue, y:yValue});
+          }
+
+          
+          var locations=[];
+          var yellowValue = 222;
+          var mapArea = document.getElementById('myCanvas');
+          var context = mapArea.getContext('2d');
+            
+            function printMousePos(event, canvas) {
+                const rectangle = mapArea.getBoundingClientRect();
+                storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations);
+                console.log(locations);
+                deathLocation();
+            }
+
+            function deathLocation(){
+                var heatSize = 50;
+                console.log("before  ", yellowValue);
+                removeYellow()
+                var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.3)'
+                context.beginPath();
+                context.arc(event.clientX, event.clientY, heatSize, 0, 2 * Math.PI);
+                context.fillStyle = colorHolder;
+                context.stroke();
+                context.fill();
+                //fills with just an x
+                /*context.fillStyle = "red";
+                context.font = "bold 30px Arial";
+                context.fillText("X", event.clientX, event.clientY);
+                */
+                function removeYellow(){
+                    yellowValue = yellowValue - 40;
+                    console.log("inside function ", yellowValue);
+                    return yellowValue;
+                }
+                console.log("outside function ", yellowValue);
+            }
+            
+            /*function deathLocation(){
+                var deathMapped = document.createElement("p");
+                deathMapped.innerText = "X"
+                deathMapped.style.position = 'absolute';
+                deathMapped.style.color = "red"
+                deathMapped.style.fontSize = "100%"
+                deathMapped.style.fontWeight = "bold"
+                deathMapped.style.backgroundColor = "rgba(255, 184, 77, 0.3)"
+                deathMapped.style.padding = "20px"
+                deathMapped.style.borderRadius = "90px"
+                deathMapped.style.left = event.clientX + 'px';
+                deathMapped.style.top = event.clientY + 'px';
+                document.getElementById("mymapArea").appendChild(deathMapped);
+            }*/
+             /*    document.getElementById("locationCordinates").textContent +=
+                "  X: " + event.clientX +
+                "  Y: " + event.clientY;
+            }*/
+
+            document.addEventListener("click", printMousePos, deathLocation);
+            //document.onclick = console.log(locations)
+            //document.onclick = clickListener;
+        </script>
+    </body>
+</html>
