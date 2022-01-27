@@ -21,6 +21,9 @@
             #myCanvas{
             position: absolute;
             }
+            button{
+                margin-top: 50px;
+            }
         </style>
     </head>
 
@@ -29,30 +32,57 @@
                 <canvas id="myCanvas" width=1920 height=998 style="cursor:crosshair"></canvas>
                 <img src="\images\customsMap.PNG" alt="The map didn't load">
                 
-        </div>
+            <button onclick="reset()">Reset</button>
+            </div>
     
 
         <script>
+        function reset(){
+            if (confirm('Are you sure you want to reset your map?')) {
+                localStorage.clear();
+                console.log("you clicked reset")
+                window.location.reload();
+            } else {
+
+            }
+        /*localStorage.clear();
+        console.log("you clicked reset")
+        window.location.reload();*/
+        }
+        //localStorage.clear();
+        var yellowValue = 222;
+        var heatSize = 40;
+        var mapArea = document.getElementById('myCanvas');
+        var context = mapArea.getContext('2d');
+        
+
+
+        if(localStorage.getItem('textValues') == null){
+        var locations=[];
+         }
+        else{
+        locations =  JSON.parse(localStorage.getItem('textValues'));
+        deathLocation("initialLoad");
+        }
+        
+
+
+          
           
           function storeCooridnate(xValue, yValue, array){
             array.push({xValue, yValue});
+            localStorage.setItem('textValues', JSON.stringify(array));
           }
 
-          
-          var locations=[];
-          var yellowValue = 222;
-          var heatSize = 40;
-          var mapArea = document.getElementById('myCanvas');
-          var context = mapArea.getContext('2d');
             
             function printMousePos(event, canvas) {
                 const rectangle = mapArea.getBoundingClientRect();
                 storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations);
                 console.log(locations);
-                deathLocation();
+                deathLocation("normal");
             }
 
-            function deathLocation(){
+            function deathLocation(type){
 
                locations.forEach(function(item,i) {
                 let heatSensitivity = 100
@@ -81,29 +111,54 @@
                     }
                    
                 });
-                //var heatSize = 50;
+
+                if (type === "initialLoad"){
+                    locations.forEach(function(item,j){
+                        var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
+                        context.beginPath();
+                        context.arc(locations[j].xValue, locations[j].yValue, heatSize, 0, 2 * Math.PI);
+                        context.fillStyle = colorHolder;
+                        context.stroke();
+                        context.fill();
+                    }
+                )
+                } 
+                else {
+                    var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
+                    //context.fillText("x",locations[locations.length - 1].xValue, locations[locations.length - 1].yValue);
+                    //context.font = "bold 30px Arial";
+                    context.beginPath();
+                    context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
+                    context.fillStyle = colorHolder;
+                    context.stroke();
+                    context.fill();
+                }
+                
+
+              /*  //var heatSize = 50;
                 //console.log("before  ", yellowValue);
                 //removeYellow()
-                var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.3)'
+                var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
                 //context.fillText("x",locations[locations.length - 1].xValue, locations[locations.length - 1].yValue);
                 //context.font = "bold 30px Arial";
                 context.beginPath();
                 context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
                 context.fillStyle = colorHolder;
                 context.stroke();
-                context.fill();
-                //fills with just an x
-                /*context.fillStyle = "red";
-                context.font = "bold 30px Arial";
-                context.fillText("X", event.clientX, event.clientY);
-                */
-                /*function removeYellow(){
-                    yellowValue = yellowValue - 40;
-                    //console.log("inside function ", yellowValue);
-                    return yellowValue;
-                }*/
-                //console.log("outside function ", yellowValue);
+                context.fill();*/
             }
+
+           /* function restoreDeathLocation(){
+                locations.forEach(function(item,j){
+                var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
+                context.beginPath();
+                context.arc(locations[j].xValue, locations[j].yValue, heatSize, 0, 2 * Math.PI);
+                context.fillStyle = colorHolder;
+                context.stroke();
+                context.fill();
+                });
+
+            }*/
             
             /*function deathLocation(){
                 var deathMapped = document.createElement("p");
@@ -124,7 +179,7 @@
                 "  Y: " + event.clientY;
             }*/
 
-            document.addEventListener("click", printMousePos);
+            myCanvas.addEventListener("click", printMousePos);
             //document.onclick = console.log(locations)
             //document.onclick = clickListener;
         </script>
