@@ -35,12 +35,13 @@
         <script>
           
           function storeCooridnate(xValue, yValue, array){
-            array.push({x: xValue, y:yValue});
+            array.push({xValue, yValue});
           }
 
           
           var locations=[];
           var yellowValue = 222;
+          var heatSize = 40;
           var mapArea = document.getElementById('myCanvas');
           var context = mapArea.getContext('2d');
             
@@ -52,12 +53,42 @@
             }
 
             function deathLocation(){
-                var heatSize = 50;
-                console.log("before  ", yellowValue);
-                removeYellow()
+
+               locations.forEach(function(item,i) {
+                let heatSensitivity = 100
+                let minimumXValue = (locations[i].xValue - heatSensitivity)
+                let maximumXValue = (locations[i].xValue + heatSensitivity)
+                let minimumYValue = (locations[i].yValue - heatSensitivity)
+                let maximumYValue = (locations[i].yValue + heatSensitivity)
+
+                function between(comparedNumber,min,max){
+                   // console.log("here",comparedNumber, min, max);
+                    return ((comparedNumber-min)*(comparedNumber-max) <= 0);   
+                    //return comparedNumber >= min && comparedNumber <= max;
+                       
+                   }
+                   console.log(between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue));
+                    if (between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue) && between(locations[locations.length - 1].yValue, minimumYValue, maximumYValue)){
+                        //console.log(locations[locations.length - 1].xValue);
+                         yellowValue = yellowValue - 60;
+                         heatSize = heatSize + 4;
+                    //console.log("inside function ", yellowValue);
+                        return yellowValue;
+                    } 
+                    else {
+                        yellowValue = 222;
+                        heatSize = 40;
+                    }
+                   
+                });
+                //var heatSize = 50;
+                //console.log("before  ", yellowValue);
+                //removeYellow()
                 var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.3)'
+                //context.fillText("x",locations[locations.length - 1].xValue, locations[locations.length - 1].yValue);
+                //context.font = "bold 30px Arial";
                 context.beginPath();
-                context.arc(event.clientX, event.clientY, heatSize, 0, 2 * Math.PI);
+                context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
                 context.fillStyle = colorHolder;
                 context.stroke();
                 context.fill();
@@ -66,12 +97,12 @@
                 context.font = "bold 30px Arial";
                 context.fillText("X", event.clientX, event.clientY);
                 */
-                function removeYellow(){
+                /*function removeYellow(){
                     yellowValue = yellowValue - 40;
-                    console.log("inside function ", yellowValue);
+                    //console.log("inside function ", yellowValue);
                     return yellowValue;
-                }
-                console.log("outside function ", yellowValue);
+                }*/
+                //console.log("outside function ", yellowValue);
             }
             
             /*function deathLocation(){
@@ -93,7 +124,7 @@
                 "  Y: " + event.clientY;
             }*/
 
-            document.addEventListener("click", printMousePos, deathLocation);
+            document.addEventListener("click", printMousePos);
             //document.onclick = console.log(locations)
             //document.onclick = clickListener;
         </script>
