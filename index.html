@@ -33,155 +33,114 @@
                 <img src="\images\customsMap.PNG" alt="The map didn't load">
                 
             <button onclick="reset()">Reset</button>
-            </div>
+        </div>
     
 
         <script>
-        function reset(){
-            if (confirm('Are you sure you want to reset your map?')) {
-                localStorage.clear();
-                console.log("you clicked reset")
-                window.location.reload();
-            } else {
+        
+            var yellowValue = 222;
+            var heatSize = 40;
+            var mapArea = document.getElementById('myCanvas');
+            var context = mapArea.getContext('2d');
+            
+
+            function reset(){
+                if (confirm('Are you sure you want to reset your map?')) {
+                    localStorage.clear();
+                    console.log("you clicked reset")
+                    window.location.reload();
+                } else {
+
+                }
 
             }
-        /*localStorage.clear();
-        console.log("you clicked reset")
-        window.location.reload();*/
-        }
-        //localStorage.clear();
-        var yellowValue = 222;
-        var heatSize = 40;
-        var mapArea = document.getElementById('myCanvas');
-        var context = mapArea.getContext('2d');
+
         
+            if(localStorage.getItem('textValues') == null){
+            var locations=[];
+            }
+            else{
+            locations =  JSON.parse(localStorage.getItem('textValues'));
+            deathLocation("initialLoad");
+            }
 
-
-        if(localStorage.getItem('textValues') == null){
-        var locations=[];
-         }
-        else{
-        locations =  JSON.parse(localStorage.getItem('textValues'));
-        deathLocation("initialLoad");
-        }
-        
-
-
-          
-          
-          function storeCooridnate(xValue, yValue, array){
-            array.push({xValue, yValue});
-            localStorage.setItem('textValues', JSON.stringify(array));
-          }
 
             
+            
+            function storeCooridnate(xValue, yValue, array, color, size){
+                array.push({xValue, yValue, color, size});
+                localStorage.setItem('textValues', JSON.stringify(array));
+            }
+
+                
             function printMousePos(event, canvas) {
                 const rectangle = mapArea.getBoundingClientRect();
-                storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations);
+                storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations, yellowValue, heatSize);
                 console.log(locations);
                 deathLocation("normal");
             }
 
             function deathLocation(type){
 
-               locations.forEach(function(item,i) {
-                let heatSensitivity = 100
-                let minimumXValue = (locations[i].xValue - heatSensitivity)
-                let maximumXValue = (locations[i].xValue + heatSensitivity)
-                let minimumYValue = (locations[i].yValue - heatSensitivity)
-                let maximumYValue = (locations[i].yValue + heatSensitivity)
 
-                function between(comparedNumber,min,max){
-                   // console.log("here",comparedNumber, min, max);
-                    return ((comparedNumber-min)*(comparedNumber-max) <= 0);   
-                    //return comparedNumber >= min && comparedNumber <= max;
-                       
-                   }
-                   console.log(between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue));
-                    if (between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue) && between(locations[locations.length - 1].yValue, minimumYValue, maximumYValue)){
-                        //console.log(locations[locations.length - 1].xValue);
-                         yellowValue = yellowValue - 60;
-                         heatSize = heatSize + 4;
-                    //console.log("inside function ", yellowValue);
-                        return yellowValue;
+
+                    if (type === "initialLoad"){
+                        locations.forEach(function(item,j){
+                            var colorHolder = 'rgba(245, ' + locations[j].color + ', 0, 0.2)'
+                            context.beginPath();
+                            context.arc(locations[j].xValue, locations[j].yValue, locations[j].size, 0, 2 * Math.PI);
+                            context.fillStyle = colorHolder;
+                            context.stroke();
+                            context.fill();
+                        }
+                    )
                     } 
                     else {
-                        yellowValue = 222;
-                        heatSize = 40;
-                    }
-                   
-                });
-
-                if (type === "initialLoad"){
-                    locations.forEach(function(item,j){
+                        colorShift()
                         var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
+                        //context.fillText("x",locations[locations.length - 1].xValue, locations[locations.length - 1].yValue);
+                        //context.font = "bold 30px Arial";
                         context.beginPath();
-                        context.arc(locations[j].xValue, locations[j].yValue, heatSize, 0, 2 * Math.PI);
+                        context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
                         context.fillStyle = colorHolder;
                         context.stroke();
                         context.fill();
                     }
-                )
-                } 
-                else {
-                    var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
-                    //context.fillText("x",locations[locations.length - 1].xValue, locations[locations.length - 1].yValue);
-                    //context.font = "bold 30px Arial";
-                    context.beginPath();
-                    context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
-                    context.fillStyle = colorHolder;
-                    context.stroke();
-                    context.fill();
-                }
-                
-
-              /*  //var heatSize = 50;
-                //console.log("before  ", yellowValue);
-                //removeYellow()
-                var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
-                //context.fillText("x",locations[locations.length - 1].xValue, locations[locations.length - 1].yValue);
-                //context.font = "bold 30px Arial";
-                context.beginPath();
-                context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
-                context.fillStyle = colorHolder;
-                context.stroke();
-                context.fill();*/
             }
 
-           /* function restoreDeathLocation(){
-                locations.forEach(function(item,j){
-                var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
-                context.beginPath();
-                context.arc(locations[j].xValue, locations[j].yValue, heatSize, 0, 2 * Math.PI);
-                context.fillStyle = colorHolder;
-                context.stroke();
-                context.fill();
-                });
+            function colorShift(){
+                    locations.forEach(function(item,i) {
+                    let heatSensitivity = 100
+                    let minimumXValue = (locations[i].xValue - heatSensitivity)
+                    let maximumXValue = (locations[i].xValue + heatSensitivity)
+                    let minimumYValue = (locations[i].yValue - heatSensitivity)
+                    let maximumYValue = (locations[i].yValue + heatSensitivity)
 
-            }*/
-            
-            /*function deathLocation(){
-                var deathMapped = document.createElement("p");
-                deathMapped.innerText = "X"
-                deathMapped.style.position = 'absolute';
-                deathMapped.style.color = "red"
-                deathMapped.style.fontSize = "100%"
-                deathMapped.style.fontWeight = "bold"
-                deathMapped.style.backgroundColor = "rgba(255, 184, 77, 0.3)"
-                deathMapped.style.padding = "20px"
-                deathMapped.style.borderRadius = "90px"
-                deathMapped.style.left = event.clientX + 'px';
-                deathMapped.style.top = event.clientY + 'px';
-                document.getElementById("mymapArea").appendChild(deathMapped);
-            }*/
-             /*    document.getElementById("locationCordinates").textContent +=
-                "  X: " + event.clientX +
-                "  Y: " + event.clientY;
-            }*/
+                    function between(comparedNumber,min,max){
+                    // console.log("here",comparedNumber, min, max);
+                        return ((comparedNumber-min)*(comparedNumber-max) <= 0);   
+                        //return comparedNumber >= min && comparedNumber <= max;
+                        
+                    }
+                    //console.log(between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue));
+                        if (between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue) && between(locations[locations.length - 1].yValue, minimumYValue, maximumYValue)){
+                            //console.log(locations[locations.length - 1].xValue);
+                            yellowValue = yellowValue - 60;
+                            heatSize = heatSize + 4;
+                        //console.log("inside function ", yellowValue);
+                            return yellowValue;
+                        } 
+                        else {
+                            yellowValue = 222;
+                            heatSize = 40;
+                        }
+                    
+                    });
+
+            }
 
             myCanvas.addEventListener("click", printMousePos);
-            //document.onclick = console.log(locations)
-            //document.onclick = clickListener;
+
         </script>
     </body>
 </html>
