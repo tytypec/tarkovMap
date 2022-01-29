@@ -3,45 +3,138 @@
     <head>
         <style>
             body{
-                margin-left: 0px;
-                width: 1920px;
-                height: 998px;
             }
             #mainContainer{
-                width: 1920px;
-                height: 998px;
-                position: absolute;
+                width: 100%;
+                #position: absolute;
             
             }
+
+            #contentContainer{
+                border-style: solid;
+                display: flex;
+                flex-direction: row;
+                #justify-content: space-around;
+            }
+            #myCanvas{
+            position: absolute;
+            border-style: solid;
+            border-color: aquamarine;
+            }
             img{
+                width: 1920px;
+                height: 998px;
                 max-width: 100%;
                 max-width: 100%
             }
-
-            #myCanvas{
-            position: absolute;
-            }
             button{
                 margin-top: 50px;
+            }
+            #sideBar{
+                border-style: solid;
+                border-color: red;
+                display: flex;
+                margin-left: 20px;
+                flex-direction: column;
+                line-height: .8;
+                #justify-content: space-evenly;
+            }
+
+            .slideContainer{
+                border-style: solid;
+
+
             }
         </style>
     </head>
 
     <body>
         <div id="mainContainer">
+            <div class="topbar">
+                hello
+            </div>
+            <div id="contentContainer">
                 <canvas id="myCanvas" width=1920 height=998 style="cursor:crosshair"></canvas>
                 <img src="\images\customsMap.PNG" alt="The map didn't load">
+                <div id="sideBar">
+                    <div class="slidecontainer">
+                        <p>Circle size:</p>
+                        <input type="range" min="6" max="80" value="40" class="slider" id="cirleSizeSlider">
+                        <p>Value: <span id="circleSizeOutput">40</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <p>Circle color:</p>
+                        <input type="range" min="1" max="222" value="222" class="slider" id="cirleColorSlider">
+                        <p>Value: <span id="cirleColorOutput">222</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <p>Heat Sensativity:</p>
+                        <input type="range" min="10" max="200" value="100" class="slider" id="heatSensitivitySlider">
+                        <p>Value: <span id="heatSensitivityOutput">100</span></p>
+                    </div>
+                    <button onclick="reset()">Reset</button>
+                </div>    
                 
-            <button onclick="reset()">Reset</button>
+            </div>
+
         </div>
     
 
         <script>
-        
-            var yellowValue = 222;
-            var heatSize = 40;
+            //var heatSize = 40;
+            //var yellowValue = 222;
             var mapArea = document.getElementById('myCanvas');
             var context = mapArea.getContext('2d');
+            var heatSizeSlider = document.getElementById("heatSizeSlider");
+            var heatSizeSliderOutput = document.getElementById("circleSizeOutput");
+            var circleColorSlider = document.getElementById("cirleColorSlider");
+            var cirleColorOutput = document.getElementById("cirleColorOutput");
+            var heatSensitivitySlider = document.getElementById("heatSensitivitySlider");
+            var heatSensitivityOutput = document.getElementById("heatSensitivityOutput");
+            var heatSize = parseInt(heatSizeSliderOutput.innerHTML);
+            var yellowValue = parseInt(cirleColorOutput.innerHTML);
+            
+            //see  function colorShift() for heatSensitivity declaration
+            //let heatSensitivity = 100
+            
+            //var smooch = document.getElementById("cirleSizeSlider").value;
+            
+            //try var blahblah = then the next line so you can use that to get the value of slider bar
+            document.getElementById("cirleSizeSlider").oninput = function(){
+                
+                var slider = document.getElementById("cirleSizeSlider");
+                var output = document.getElementById("circleSizeOutput");
+                output.innerHTML = slider.value;
+
+                slider.oninput = function() {
+                output.innerHTML = this.value;
+                }
+                
+            };
+
+            document.getElementById("cirleColorSlider").oninput = function(){
+                
+                var slider = document.getElementById("cirleColorSlider");
+                var output = document.getElementById("cirleColorOutput");
+                output.innerHTML = slider.value;
+
+                slider.oninput = function() {
+                output.innerHTML = this.value;
+                }
+                
+            };
+
+            document.getElementById("heatSensitivitySlider").oninput = function(){
+                
+                var slider = document.getElementById("heatSensitivitySlider");
+                var output = document.getElementById("heatSensitivityOutput");
+                output.innerHTML = slider.value;
+
+                slider.oninput = function() {
+                output.innerHTML = this.value;
+                }
+                
+            };
             
 
             function reset(){
@@ -110,7 +203,8 @@
 
             function colorShift(){
                     locations.forEach(function(item,i) {
-                    let heatSensitivity = 100
+                        var heatSensitivity =  parseInt(heatSensitivityOutput.innerHTML);
+                        console.log(heatSensitivity);
                     let minimumXValue = (locations[i].xValue - heatSensitivity)
                     let maximumXValue = (locations[i].xValue + heatSensitivity)
                     let minimumYValue = (locations[i].yValue - heatSensitivity)
@@ -131,8 +225,10 @@
                             return yellowValue;
                         } 
                         else {
-                            yellowValue = 222;
-                            heatSize = 40;
+                            //heatSize = 40;
+                            //yellowValue = 222;
+                            yellowValue = parseInt(cirleColorOutput.innerHTML);
+                            heatSize = parseInt(heatSizeSliderOutput.innerHTML);
                         }
                     
                     });
@@ -140,6 +236,9 @@
             }
 
             myCanvas.addEventListener("click", printMousePos);
+            
+
+            
 
         </script>
     </body>
