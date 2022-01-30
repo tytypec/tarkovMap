@@ -69,7 +69,7 @@
                     </div>
                     <div class="slidecontainer">
                         <p>Heat Sensativity:</p>
-                        <input type="range" min="0" max="200" value="100" class="slider" id="heatSensitivitySlider">
+                        <input type="range" min="10" max="200" value="100" class="slider" id="heatSensitivitySlider">
                         <p>Value: <span id="heatSensitivityOutput">100</span></p>
                     </div>
                     <button onclick="reset()">Reset</button>
@@ -150,11 +150,9 @@
         
             if(localStorage.getItem('textValues') == null){
             var locations=[];
-            //var customsArray=[];
-            //var mapSelected = customsArray
             }
             else{
-            locations = JSON.parse(localStorage.getItem('textValues'));
+            locations =  JSON.parse(localStorage.getItem('textValues'));
             deathLocation("initialLoad");
             }
 
@@ -167,14 +165,14 @@
             }
 
                 
-            function printMousePos() {
+            function printMousePos(event, canvas) {
                 const rectangle = mapArea.getBoundingClientRect();
                 storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations, yellowValue, heatSize);
                 console.log(locations);
-                deathLocation("normal", locations);
+                deathLocation("normal");
             }
 
-            function deathLocation(type, locations){
+            function deathLocation(type){
 
 
 
@@ -236,11 +234,9 @@
 
             }
 
-            myCanvas.addEventListener("click", foo);
+            myCanvas.addEventListener("click", printMousePos);
             
-            function foo(){
-                printMousePos(mapSelected);
-            }
+
             
 
         </script>
