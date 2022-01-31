@@ -5,7 +5,6 @@
             body{
             }
             #mainContainer{
-                width: 100%;
                 #position: absolute;
             
             }
@@ -16,14 +15,15 @@
                 flex-direction: row;
                 #justify-content: space-around;
             }
+            #imageAndCanvas{
+            width: 85%;
+            }
             #myCanvas{
             position: absolute;
             border-style: solid;
             border-color: aquamarine;
             }
             img{
-                width: 1920px;
-                height: 998px;
                 max-width: 100%;
                 max-width: 100%
             }
@@ -31,6 +31,7 @@
                 margin-top: 50px;
             }
             #sideBar{
+                width: 15%;
                 border-style: solid;
                 border-color: red;
                 display: flex;
@@ -54,8 +55,11 @@
                 hello
             </div>
             <div id="contentContainer">
-                <canvas id="myCanvas" width=1920 height=998 style="cursor:crosshair"></canvas>
-                <img src="https://github.com/tytypec/tarkovMap/blob/main/images/customsMap.png?raw=true" alt="The map didn't load">
+                    <canvas id="myCanvas" style="cursor:crosshair"></canvas>
+                    <!--<img src="https://github.com/tytypec/tarkovMap/blob/main/images/customsMap.png?raw=true" alt="The map didn't load">-->
+                    <div id="imageAndCanvas">
+                    <img id="map" src="images/customsMap.png" alt="The map didn't load">
+                </div>
                 <div id="sideBar">
                     <div class="slidecontainer">
                         <p>Circle size:</p>
@@ -98,6 +102,20 @@
             
             //var smooch = document.getElementById("cirleSizeSlider").value;
             
+            //resizes canvas and image to container size. issue with coordinates on resize
+            fitToContainer(mapArea);
+
+            function fitToContainer(canvas){
+                var imageAndCanvasContainer = document.getElementById("imageAndCanvas");
+                var ratio = 3820/1986 
+                // Make it visually fill the positioned parent
+                //canvas.style.width ='100%';
+                //canvas.style.height='100%';
+                // ...then set the internal size to match
+                canvas.width  = imageAndCanvasContainer.offsetWidth;
+                canvas.height = imageAndCanvasContainer.offsetWidth / ratio;
+            }
+
             //try var blahblah = then the next line so you can use that to get the value of slider bar
             document.getElementById("cirleSizeSlider").oninput = function(){
                 
@@ -235,9 +253,11 @@
             }
 
             myCanvas.addEventListener("click", printMousePos);
-            
-
-            
+            window.addEventListener('resize', onResize);
+            function onResize(){
+                fitToContainer(mapArea);
+                deathLocation("initialLoad");
+            }
 
         </script>
     </body>
