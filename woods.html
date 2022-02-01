@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            
+            body{
+                background-image: url("https://github.com/tytypec/tarkovMap/blob/main/images/sunset.png?raw=true");
+                display: flex;
+            }
+            #mainContainer{
+                margin-left: 20px;
+                width: 95%;
+                position: absolute;
+            
+            }
+            .topBar{
+                overflow: hidden;
+                background-color: rgba(0, 0, 0, 0.589);
+                margin-bottom: 10px; 
+            }
+
+            .topBar a {
+                float: left;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 17px;
+            }
+
+            .topBar a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+            .topBar a.active {
+                background-color: #74664d;
+                color: white;
+            }
+
+            #contentContainer{
+                background-color: rgba(0, 0, 0, 0.589);
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+            #imageAndCanvas{
+                
+            }
+            #myCanvas{
+            position: absolute;
+            border-color: aquamarine;
+            }
+            button{
+                margin-top: 50px;
+            }
+            #sideBar{
+                color: rgb(146, 146, 150);
+                background-color: rgba(34, 26, 23, 0.989);
+                text-align: center;
+                margin-top: 5px;
+                border-color: red;
+                display: flex;
+                flex-direction: column;
+                line-height: .9;
+            }
+
+            .slideContainer{
+                padding: 2px;
+                border-style: solid;
+
+
+            }
+            #imageAndCanvas{
+                margin-right: 10px;
+            }
+
+            .keyInfo {
+                text-align: center;
+                margin-top: 4px;
+                margin-bottom: 4px;
+                line-height: 1;
+                position: relative;
+            }
+            .keyInfo span {
+                display: none;
+            }
+                
+            .keyInfo:hover span {
+                line-height: 1.4;
+                position: absolute;
+                display: inline-block;
+                left: 0px;
+                top: 18px;
+                padding: 5px;
+                background-color: rgb(0, 0, 0, 1);
+                color: rgb(255, 255, 255);
+            }
+            .bottomBar{
+                overflow: hidden;
+                background-color: rgba(0, 0, 0, 0.589);
+                margin-top: 10px; 
+            }
+            .bottomBar a{
+                float: left;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 17px;
+            }
+            .bottomBar a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+            .bottomBar a.active {
+                background-color: #74664d;
+                color: white;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="mainContainer">
+            <div class="topBar">
+                <a href="/index.html">Home</a>
+                <a href="/customs.html">Customs</a>
+                <a href="/interchange.html">Interchange</a>
+                <a href="/lighthouse.html">Lighthouse</a>
+                <a href="/reserve.html">Reserve</a>
+                <a href="/shoreline.html">Shoreline</a>
+                <a class="active" href="/woods.html">Woods</a>
+                <a href="/about.html">About</a>
+            </div>
+            <div id="contentContainer">
+                <div id="imageAndCanvas">
+                    <canvas id="myCanvas" width=1587 height=1587 style="cursor:crosshair"></canvas>
+                    <img src="images/woods.png" width=1590 height=1590 alt="The map didn't load">
+                    
+                    <!--<img id="map" src="images/customsMap.png" width=1590 height=834 alt="The map didn't load">-->
+                </div>
+                <div id="sideBar">
+                    <div class="slidecontainer">
+                        <!--<button id="circleSizeAbout" title="I Show up on Hover">Circle Size</button> <br> -->
+                        <div class="keyInfo">Circle size: <span>This value changes initial size of circle.</span></div>
+                        <input type="range" min="6" max="80" value="40" class="slider" id="cirleSizeSlider">
+                        <p>Value: <span id="circleSizeOutput">40</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <div class="keyInfo">Circle size increase: <span>This value increase the size of a new circle if it is close to another circle.</span> </div>
+                        <input type="range" min="0" max="6" value="0" class="slider" id="circleSizeIncreaseSlider">
+                        <p>Value: <span id="circleSizeIncreaseOutput">0</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <div class="keyInfo">Initial circle color: <span> The starting color of placed cirle lower value will be more red.</span></div>
+                        <input type="range" min="1" max="222" value="222" class="slider" id="cirleColorSlider">
+                        <p>Value: <span id="cirleColorOutput">222</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <div class="keyInfo">Color change: <span>This value will add red color when a new circle is placed near previously placed circle.</span></div>
+                        <input type="range" min="0" max="80" value="60" class="slider" id="colorChangeSlider">
+                        <p>Value: <span id="colorChangeOutput">60</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <div class="keyInfo">Sensativity: <span>This value governs how close a newly placed cirle needs to be for the 'Circle size increase' and 'Color change' to take effect. </span> </div>
+                        <input type="range" min="10" max="200" value="40" class="slider" id="heatSensitivitySlider">
+                        <p>Value: <span id="heatSensitivityOutput">40</span></p>
+                    </div>
+
+                    <button onclick="reset()">Reset</button>
+                </div>    
+                    
+            </div>
+            <div class="bottomBar">
+                <a class="active" href="#home">Home</a>
+                <a href="#customs">Customs</a>
+                <a href="#contact">Contact</a>
+                <a href="#about">About</a>
+            </div>
+        </div>
+    
+
+        <script>
+            //var heatSize = 40;
+            //var yellowValue = 222;
+            var mapArea = document.getElementById('myCanvas');
+            var context = mapArea.getContext('2d');
+            var heatSizeSlider = document.getElementById("heatSizeSlider");
+            var heatSizeSliderOutput = document.getElementById("circleSizeOutput");
+            var circleColorSlider = document.getElementById("cirleColorSlider");
+            var cirleColorOutput = document.getElementById("cirleColorOutput");
+            var heatSensitivitySlider = document.getElementById("heatSensitivitySlider");
+            var heatSensitivityOutput = document.getElementById("heatSensitivityOutput");
+            var circleSizeIncreaseSlider = document.getElementById("circleSizeIncreaseSlider");
+            var circleSizeIncreaseOutput = document.getElementById("circleSizeIncreaseOutput");
+            var colorChangeSlider = document.getElementById("colorChangeSlider");
+            var colorChangeOutput = document.getElementById("colorChangeOutput");
+            var heatSize = parseInt(heatSizeSliderOutput.innerHTML);
+            var yellowValue = parseInt(cirleColorOutput.innerHTML);
+            var heatGrowthFactor = parseInt(circleSizeIncreaseOutput.innerHTML);
+            var colorChangeFactor = parseInt(colorChangeOutput.innerHTML);
+            
+            //see  function colorShift() for heatSensitivity declaration
+            //let heatSensitivity = 100
+            
+            //var smooch = document.getElementById("cirleSizeSlider").value;
+            
+            //resizes canvas and image to container size. issue with coordinates on resize
+            
+
+            //try var blahblah = then the next line so you can use that to get the value of slider bar
+            document.getElementById("cirleSizeSlider").oninput = function(){
+                
+                var slider = document.getElementById("cirleSizeSlider");
+                var output = document.getElementById("circleSizeOutput");
+                output.innerHTML = slider.value;
+
+                slider.oninput = function() {
+                output.innerHTML = this.value;
+                }
+                
+            };
+
+            document.getElementById("cirleColorSlider").oninput = function(){
+                
+                var slider = document.getElementById("cirleColorSlider");
+                var output = document.getElementById("cirleColorOutput");
+                output.innerHTML = slider.value;
+
+                slider.oninput = function() {
+                output.innerHTML = this.value;
+                }
+                
+            };
+
+            document.getElementById("heatSensitivitySlider").oninput = function(){
+                
+                var slider = document.getElementById("heatSensitivitySlider");
+                var output = document.getElementById("heatSensitivityOutput");
+                output.innerHTML = slider.value;
+
+                slider.oninput = function() {
+                output.innerHTML = this.value;
+                }
+                
+            };
+
+            document.getElementById("circleSizeIncreaseSlider").oninput = function(){
+                
+                var slider = document.getElementById("circleSizeIncreaseSlider");
+                var output = document.getElementById("circleSizeIncreaseOutput");
+                output.innerHTML = slider.value;
+
+                slider.oninput = function() {
+                output.innerHTML = this.value;
+                }
+                
+            };
+
+            document.getElementById("colorChangeSlider").oninput = function(){
+                
+                var slider = document.getElementById("colorChangeSlider");
+                var output = document.getElementById("colorChangeOutput");
+                output.innerHTML = slider.value;
+
+                slider.oninput = function() {
+                output.innerHTML = this.value;
+                }
+                
+            };
+            
+
+            function reset(){
+                if (confirm('Are you sure you want to reset your map?')) {
+                    localStorage.removeItem("woodsTextValues");
+                    //localStorage.clear();
+                    console.log("you clicked reset")
+                    window.location.reload();
+                } else {
+
+                }
+
+            }
+
+        
+            if(localStorage.getItem('woodsTextValues') == null){
+            var locations=[];
+            }
+            else{
+            locations =  JSON.parse(localStorage.getItem('woodsTextValues'));
+            deathLocation("initialLoad");
+            }
+
+
+            
+            
+            function storeCooridnate(xValue, yValue, array, color, size){
+                array.push({xValue, yValue, color, size});
+                localStorage.setItem('woodsTextValues', JSON.stringify(array));
+            }
+
+                
+            function printMousePos(event, canvas) {
+                const rectangle = mapArea.getBoundingClientRect();
+                storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations, yellowValue, heatSize);
+                console.log(locations);
+                deathLocation("normal");
+            }
+
+            function deathLocation(type){
+
+
+
+                    if (type === "initialLoad"){
+                        locations.forEach(function(item,j){
+                            var colorHolder = 'rgba(245, ' + locations[j].color + ', 0, 0.2)'
+                            context.beginPath();
+                            context.arc(locations[j].xValue, locations[j].yValue, locations[j].size, 0, 2 * Math.PI);
+                            context.fillStyle = colorHolder;
+                            context.stroke();
+                            context.fill();
+                        }
+                    )
+                    } 
+                    else {
+                        colorShift()
+                        var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
+                        //context.fillText("x",locations[locations.length - 1].xValue, locations[locations.length - 1].yValue);
+                        //context.font = "bold 30px Arial";
+                        context.beginPath();
+                        context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
+                        context.fillStyle = colorHolder;
+                        context.stroke();
+                        context.fill();
+                    }
+            }
+
+            function colorShift(){
+                var heatGrowthFactor = parseInt(circleSizeIncreaseOutput.innerHTML);
+                var colorChangeFactor = parseInt(colorChangeOutput.innerHTML);
+
+                    locations.forEach(function(item,i) {
+                        var heatSensitivity =  parseInt(heatSensitivityOutput.innerHTML);
+                        console.log(heatSensitivity);
+                    let minimumXValue = (locations[i].xValue - heatSensitivity)
+                    let maximumXValue = (locations[i].xValue + heatSensitivity)
+                    let minimumYValue = (locations[i].yValue - heatSensitivity)
+                    let maximumYValue = (locations[i].yValue + heatSensitivity)
+
+                    function between(comparedNumber,min,max){
+                    // console.log("here",comparedNumber, min, max);
+                        return ((comparedNumber-min)*(comparedNumber-max) <= 0);   
+                        //return comparedNumber >= min && comparedNumber <= max;
+                        
+                    }
+                    //console.log(between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue));
+                        if (between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue) && between(locations[locations.length - 1].yValue, minimumYValue, maximumYValue)){
+                            //console.log(locations[locations.length - 1].xValue);
+                            yellowValue = yellowValue - colorChangeFactor;
+                            heatSize = heatSize + heatGrowthFactor;
+                            console.log(heatGrowthFactor);
+                        //console.log("inside function ", yellowValue);
+                            return yellowValue;
+                        } 
+                        else {
+                            //heatSize = 40;
+                            //yellowValue = 222;
+                            yellowValue = parseInt(cirleColorOutput.innerHTML);
+                            heatSize = parseInt(heatSizeSliderOutput.innerHTML);
+                        }
+                    
+                    });
+
+            }
+
+            myCanvas.addEventListener("click", printMousePos);
+            
+            /*window.addEventListener('resize', onResize);
+            function ifIWantToAddResize(){
+                fitToContainer(mapArea);
+
+                function fitToContainer(canvas){
+                    var imageAndCanvasContainer = document.getElementById("imageAndCanvas");
+                    var ratio = 3820/1986 
+                    // Make it visually fill the positioned parent
+                    //canvas.style.width ='100%';
+                    //canvas.style.height='100%';
+                    // ...then set the internal size to match
+                    canvas.width  = imageAndCanvasContainer.offsetWidth;
+                    canvas.height = imageAndCanvasContainer.offsetWidth / ratio;
+                }
+                function onResize(){
+                    fitToContainer(mapArea);
+                    deathLocation("initialLoad");
+                }
+            }*/
+        </script>
+    </body>
+</html>
