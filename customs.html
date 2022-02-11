@@ -182,6 +182,7 @@
             //var yellowValue = 222;
             var mapArea = document.getElementById('myCanvas');
             var context = mapArea.getContext('2d');
+            var stickerType = "gpu"
             var heatSizeSlider = document.getElementById("heatSizeSlider");
             var heatSizeSliderOutput = document.getElementById("circleSizeOutput");
             var circleColorSlider = document.getElementById("cirleColorSlider");
@@ -196,6 +197,8 @@
             var yellowValue = parseInt(cirleColorOutput.innerHTML);
             var heatGrowthFactor = parseInt(circleSizeIncreaseOutput.innerHTML);
             var colorChangeFactor = parseInt(colorChangeOutput.innerHTML);
+
+
             
             //see  function colorShift() for heatSensitivity declaration
             //let heatSensitivity = 100
@@ -291,7 +294,7 @@
 
             
             
-            function storeCooridnate(xValue, yValue, array, color, size){
+            function storeCooridnate(xValue, yValue, array, color, size, image){
                 array.push({xValue, yValue, color, size});
                 localStorage.setItem('customsTextValues', JSON.stringify(array));
             }
@@ -299,34 +302,47 @@
                 
             function printMousePos(event, canvas) {
                 const rectangle = mapArea.getBoundingClientRect();
-                storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations, yellowValue, heatSize);
+                storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations, yellowValue, heatSize,stickerType);
                 console.log(locations);
                 deathLocation("normal");
             }
 
+            var img = new Image();
+            img.src = "images/items/GPU4.png"
+
             function deathLocation(type){
+                var img = new Image();
+                img.src = "images/items/GPU4.png"
 
 
-
-                    if (type === "initialLoad"){
+                if (type === "initialLoad"){
+                        console.log("array on initail load",locations);
+                        img.onload = function(){
                         locations.forEach(function(item,j){
                             var colorHolder = 'rgba(245, ' + locations[j].color + ', 0, 0.2)'
                             context.beginPath();
-                            context.arc(locations[j].xValue, locations[j].yValue, locations[j].size, 0, 2 * Math.PI);
+                            
+                            context.drawImage(img, locations[j].xValue, locations[j].yValue);
+                        
+                            //context.arc(locations[j].xValue, locations[j].yValue, locations[j].size, 0, 2 * Math.PI);
+                            //context.drawImage(img, locations[j].xValue, locations[j].yValue);
+                            img.src = "images/items/greenBat.png";
                             context.fillStyle = colorHolder;
                             context.stroke();
                             context.fill();
+
                         }
-                    )
-                    } 
+                    )};
+                }
                     else {
-                        colorShift()
-                        var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
+                        //colorShift()
+                        //var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
                         //context.fillText("x",locations[locations.length - 1].xValue, locations[locations.length - 1].yValue);
                         //context.font = "bold 30px Arial";
                         context.beginPath();
-                        context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
-                        context.fillStyle = colorHolder;
+                        context.drawImage(img, locations[locations.length -1].xValue, locations[locations.length -1].yValue); 
+                        //context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
+                        //context.fillStyle = colorHolder;
                         context.stroke();
                         context.fill();
                     }
