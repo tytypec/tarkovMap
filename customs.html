@@ -158,32 +158,48 @@
                     <input type="range" min="6" max="80" value="40" class="slider" id="cirleSizeSlider">
                     <p>Value: <span id="circleSizeOutput">40</span></p>
                 </div>
-                <div class="slidecontainer">
-                    <div class="keyInfo">Circle size increase: <span>This value increase the size of a new circle if it
-                            is close to another circle.</span> </div>
-                    <input type="range" min="0" max="6" value="0" class="slider" id="circleSizeIncreaseSlider">
-                    <p>Value: <span id="circleSizeIncreaseOutput">0</span></p>
-                </div>
-                <div class="slidecontainer">
-                    <div class="keyInfo">Initial circle color: <span> The starting color of placed cirle lower value
-                            will be more red.</span></div>
-                    <input type="range" min="1" max="222" value="222" class="slider" id="cirleColorSlider">
-                    <p>Value: <span id="cirleColorOutput">222</span></p>
-                </div>
-                <div class="slidecontainer">
-                    <div class="keyInfo">Color change: <span>This value will add red color when a new circle is placed
-                            near previously placed circle.</span></div>
-                    <input type="range" min="0" max="80" value="60" class="slider" id="colorChangeSlider">
-                    <p>Value: <span id="colorChangeOutput">60</span></p>
-                </div>
-                <div class="slidecontainer">
-                    <div class="keyInfo">Sensativity: <span>This value governs how close a newly placed cirle needs to
-                            be for the 'Circle size increase' and 'Color change' to take effect. </span> </div>
-                    <input type="range" min="10" max="200" value="40" class="slider" id="heatSensitivitySlider">
-                    <p>Value: <span id="heatSensitivityOutput">40</span></p>
-                </div>
+                <div id="sideBar">
+                    <div id="tileContainer">
+                        <div class="imageTile">
+                            <img src="images/items/GPU4.png" onclick="imageSet('images/items/GPU4.png')">
+                        </div>
+                        <div class="imageTile">
+                            <img src="images/items/greenBat.png" onclick="imageSet('images/items/greenBat.png')">
+                        </div>
+                    </div>
+                    <div class="slidecontainer">
+                        <!--<button id="circleSizeAbout" title="I Show up on Hover">Circle Size</button> <br> -->
+                        <div class="keyInfo">Circle size: <span>This value changes initial size of circle.</span></div>
+                        <input type="range" min="6" max="80" value="40" class="slider" id="cirleSizeSlider">
+                        <p>Value: <span id="circleSizeOutput">40</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <div class="keyInfo">Circle size increase: <span>This value increase the size of a new circle if it is close to another circle.</span> </div>
+                        <input type="range" min="0" max="6" value="0" class="slider" id="circleSizeIncreaseSlider">
+                        <p>Value: <span id="circleSizeIncreaseOutput">0</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <div class="keyInfo">Initial circle color: <span> The starting color of placed cirle lower value will be more red.</span></div>
+                        <input type="range" min="1" max="222" value="222" class="slider" id="cirleColorSlider">
+                        <p>Value: <span id="cirleColorOutput">222</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <div class="keyInfo">Color change: <span>This value will add red color when a new circle is placed near previously placed circle.</span></div>
+                        <input type="range" min="0" max="80" value="60" class="slider" id="colorChangeSlider">
+                        <p>Value: <span id="colorChangeOutput">60</span></p>
+                    </div>
+                    <div class="slidecontainer">
+                        <div class="keyInfo">Sensativity: <span>This value governs how close a newly placed cirle needs to be for the 'Circle size increase' and 'Color change' to take effect. </span> </div>
+                        <input type="range" min="10" max="200" value="40" class="slider" id="heatSensitivitySlider">
+                        <p>Value: <span id="heatSensitivityOutput">40</span></p>
+                    </div>
 
-                <button onclick="reset()">Reset</button>
+                    <button onclick="reset()">Reset</button>
+                </div>    
+                    
+            </div>
+            <div class="bottomBar">
+                <a href="/index.html">Home</a>
             </div>
 
         </div>
@@ -311,6 +327,11 @@
             deathLocation("normal");
         }
 
+        function imageSet(currentItem){
+            console.log(currentItem);
+            img.src = currentItem;
+        }
+
 
         function drawOnInitialLoad(){
 
@@ -380,7 +401,7 @@
             deathLocation("initialLoad");
         }
 
-        
+
         img.onload = function(){
             drawOnInitialLoad();
             myCanvas.addEventListener("click", printMousePos);
