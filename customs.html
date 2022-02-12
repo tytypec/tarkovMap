@@ -214,7 +214,7 @@
         //var yellowValue = 222;
         var mapArea = document.getElementById('myCanvas');
         var context = mapArea.getContext('2d');
-        var stickerType = "gpu"
+        //var stickerType = "gpu"
         var heatSizeSlider = document.getElementById("heatSizeSlider");
         var heatSizeSliderOutput = document.getElementById("circleSizeOutput");
         var circleColorSlider = document.getElementById("cirleColorSlider");
@@ -314,27 +314,38 @@
 
         }
        
-        function storeCooridnate(xValue, yValue, array, color, size, image) {
-            array.push({ xValue, yValue, color, size });
-            localStorage.setItem('customsTextValues', JSON.stringify(array));
-        }
 
-
-        function printMousePos(event, canvas) {
+        
+        function drawLocation(event, canvas) {
             const rectangle = mapArea.getBoundingClientRect();
-            storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations, yellowValue, heatSize, stickerType);
-            console.log(locations);
-            deathLocation("normal");
+            
+            var location = {
+                xValue: event.clientX - rectangle.left,
+                yValue: event.clientY - rectangle.top, 
+                color: yellowValue, 
+                size: heatSize,
+                imagePath: userSelection.lootItemPath,
+                lootItemName: userSelection.lootItemName
+            };
+            locations.push(location)
+            localStorage.setItem('customsTextValues', JSON.stringify(locations));
+            var locationToDraw = locations[locations.length - 1];
+            context.drawImage(img, locationToDraw.xValue -10, locationToDraw.yValue -8);
         }
 
-        function imageSet(currentItem){
-            console.log(currentItem);
-            img.src = currentItem;
+        //what the user currently has selected
+        var userSelection = {
+            lootItemName: 'GPU',
+            lootItemPath: 'images/items/GPU4.png'
+        };
+
+        function imageSet(imagePath){
+            userSelection.lootItemPath = imagePath;
+            img.src = userSelection.lootItemPath;
         }
 
 
         function drawOnInitialLoad(){
-
             console.log("array on initail load", locations);
             console.log("insde on load");
             locations.forEach(function (item, j) {
@@ -342,14 +353,6 @@
             });
         }
 
-
-        function deathLocation(type) {
-
-            var locationToDraw = locations.length ? locations[locations.length - 1] : locations[0];
-            console.log("click death location not int load");
-            console.log(locationToDraw.xValue);
-            context.drawImage(img, locationToDraw.xValue, locationToDraw.yValue);
-        }
 
         function colorShift() {
             var heatGrowthFactor = parseInt(circleSizeIncreaseOutput.innerHTML);
@@ -398,13 +401,13 @@
         else {
             console.log("loading from local storage")
             locations = JSON.parse(localStorage.getItem('customsTextValues'));
-            deathLocation("initialLoad");
+            //drawLocation("initialLoad");
         }
 
 
         img.onload = function(){
             drawOnInitialLoad();
-            myCanvas.addEventListener("click", printMousePos);
+            myCanvas.addEventListener("click", drawLocation);
         }
 
         /*window.addEventListener('resize', onResize);
@@ -423,7 +426,7 @@
             }
             function onResize(){
                 fitToContainer(mapArea);
-                deathLocation("initialLoad");
+                drawLocation("initialLoad");
             }
         }*/
     </script>
