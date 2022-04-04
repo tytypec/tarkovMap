@@ -63,11 +63,17 @@
             color: rgb(146, 146, 150);
             background-color: rgba(34, 26, 23, 0.989);
             text-align: center;
+            width: 133px;
             margin-top: 5px;
-            border-color: red;
             display: flex;
             flex-direction: column;
             line-height: .9;
+        }
+        #currentlySelectedSticker {
+            margin-bottom: 10px;
+            border-style: none;
+            padding: 5px;
+
         }
 
         .slideContainer {
@@ -128,6 +134,84 @@
             background-color: #74664d;
             color: white;
         }
+        .sideBarTitle{
+            font-size: x-large;
+            margin-bottom: 10px;
+        }
+        #locationsTable{
+            border-style: solid;
+            margin-left: 10px;
+            margin-right: 10px;
+            max-height:400px;
+            overflow-y:auto;
+        }
+
+        ::-webkit-scrollbar {
+             width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.589); 
+        }
+        ::-webkit-scrollbar-thumb {
+             background: rgb(146, 146, 150); 
+        }
+
+        .dropbtn {
+            background-color: #3d362f00;
+            margin-top: 0px;
+            margin-bottom: 20px;
+            color: #888787;
+            color: rgba(54, 54, 54, 0.342);
+            padding: 12px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+
+            /* Dropdown button on hover & focus */
+            .dropbtn:hover, .dropbtn:focus {
+            background-color: #4b4b4b;
+        }
+
+            /* The container <div> - needed to position the dropdown content */
+            .dropdown {
+            color: #747474;
+            position: relative;
+            display: inline-block;
+        }
+
+            /* Dropdown Content (Hidden by Default) */
+            .dropdown-content {
+            display: none;
+            margin-top: -19.5px;
+            margin-left: 0px;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.889);
+            min-width: 107px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            /* Links inside the dropdown */
+            .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            /* Change color of dropdown links on hover */
+            .dropdown-content a:hover {background-color: #ddd}
+
+            /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+            .show {display:block;}
+            
+            ul{
+            list-style-type: none;
+            columns: 2;
+            margin: 0;
+            padding: 0;
+            }
     </style>
 </head>
 
@@ -145,6 +229,7 @@
         </div>
         <div id="contentContainer">
             <div id="imageAndCanvas">
+                <canvas id="highlightCanvas" width=1587 height=831 style="cursor:crosshair; position: absolute;"></canvas>
                 <canvas id="myCanvas" width=1587 height=831 style="cursor:crosshair"></canvas>
                 <img src="https://github.com/tytypec/tarkovMap/blob/main/images/customsMap.png?raw=true" width=1590
                     height=834 alt="The map didn't load">-->
@@ -159,47 +244,48 @@
                     <p>Value: <span id="circleSizeOutput">40</span></p>
                 </div>
                 <div id="sideBar">
-                    <div id="tileContainer">
+                    <div id="currentlySelectedSticker">
+                        Current Image <br> <img src = images/items/GPU4.png>
+                    </div>
+                    <div class="dropdown">
+                        <button onclick="myFunction()" class="dropbtn" style="color: rgb(146, 146, 150); border-style: solid;">Select Image</button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <ul>
+                                <li><a onclick="imageSet('0')"><img src="images/items/GPU4.png" onclick="imageSet('0')"></a></li>
+                                <li><a onclick="imageSet('1')"><img src="images/items/greenBat.png" onclick="imageSet('1')"></a></li>
+                                <li><a onclick="imageSet('2')"><img src="images/items/physicalBitcoin.png" onclick="imageSet('2')"></a></li>
+                                <li><a onclick="imageSet('3')"><img src="images/items/ledx.png" onclick="imageSet('3')"></a></li>
+                                <li><a onclick="imageSet('4')"><img src="images/items/aesa.png" onclick="imageSet('4')"></a></li>
+                                <li><a onclick="imageSet('5')"><img src="images/items/defib.png" onclick="imageSet('5')"></a></li>
+                                <li><a onclick="imageSet('6')"><img src="images/items/intel.png" onclick="imageSet('6')"></a></li>
+                                <li><a onclick="imageSet('7')"><img src="images/items/mfilter.png" onclick="imageSet('7')"></a></li>
+                                <li><a onclick="imageSet('8')"><img src="images/items/mtube.png" onclick="imageSet('8')"></a></li>
+                                <li><a onclick="imageSet('9')"><img src="images/items/vpx.png" onclick="imageSet('9')"></a></li>
+                            </ul>
+                        </div>
+                      </div>
+                    <!--<div id="tileContainer">
                         <div class="imageTile">
-                            <img src="images/items/GPU4.png" onclick="imageSet('images/items/GPU4.png')">
+                            <img src="images/items/GPU4.png" onclick="imageSet('0')">
                         </div>
                         <div class="imageTile">
-                            <img src="images/items/greenBat.png" onclick="imageSet('images/items/greenBat.png')">
+                            <img src="images/items/greenBat.png" onclick="imageSet('1')">
                         </div>
+                        <div class="imageTile">
+                            <img src="images/items/physicalBitcoin.png" onclick="imageSet('2')">
+                        </div>
+                    </div> -->
+                    <div class="sideBarTitle">History</div>
+                    <div id="locationsTable">
+                        <table> 
+                            <tr>
+                                <th>Loot</th>
+                            </tr>
+                        </table>
                     </div>
-                    <div class="slidecontainer">
-                        <!--<button id="circleSizeAbout" title="I Show up on Hover">Circle Size</button> <br> -->
-                        <div class="keyInfo">Circle size: <span>This value changes initial size of circle.</span></div>
-                        <input type="range" min="6" max="80" value="40" class="slider" id="cirleSizeSlider">
-                        <p>Value: <span id="circleSizeOutput">40</span></p>
-                    </div>
-                    <div class="slidecontainer">
-                        <div class="keyInfo">Circle size increase: <span>This value increase the size of a new circle if it is close to another circle.</span> </div>
-                        <input type="range" min="0" max="6" value="0" class="slider" id="circleSizeIncreaseSlider">
-                        <p>Value: <span id="circleSizeIncreaseOutput">0</span></p>
-                    </div>
-                    <div class="slidecontainer">
-                        <div class="keyInfo">Initial circle color: <span> The starting color of placed cirle lower value will be more red.</span></div>
-                        <input type="range" min="1" max="222" value="222" class="slider" id="cirleColorSlider">
-                        <p>Value: <span id="cirleColorOutput">222</span></p>
-                    </div>
-                    <div class="slidecontainer">
-                        <div class="keyInfo">Color change: <span>This value will add red color when a new circle is placed near previously placed circle.</span></div>
-                        <input type="range" min="0" max="80" value="60" class="slider" id="colorChangeSlider">
-                        <p>Value: <span id="colorChangeOutput">60</span></p>
-                    </div>
-                    <div class="slidecontainer">
-                        <div class="keyInfo">Sensativity: <span>This value governs how close a newly placed cirle needs to be for the 'Circle size increase' and 'Color change' to take effect. </span> </div>
-                        <input type="range" min="10" max="200" value="40" class="slider" id="heatSensitivitySlider">
-                        <p>Value: <span id="heatSensitivityOutput">40</span></p>
-                    </div>
-
                     <button onclick="reset()">Reset</button>
                 </div>    
                     
-            </div>
-            <div class="bottomBar">
-                <a href="/index.html">Home</a>
             </div>
 
         </div>
@@ -210,10 +296,16 @@
 
 
     <script>
+        var unique = "0";
+        var graphicsCard = "";
+        var greenBat = "";
+        var physicalBitcoin = ""
         //var heatSize = 40;
         //var yellowValue = 222;
         var mapArea = document.getElementById('myCanvas');
         var context = mapArea.getContext('2d');
+        var highlightArea = document.getElementById('myCanvas');
+        var highlightCanvas = highlightArea.getContext('2d');
         //var stickerType = "gpu"
         var heatSizeSlider = document.getElementById("heatSizeSlider");
         var heatSizeSliderOutput = document.getElementById("circleSizeOutput");
@@ -225,10 +317,13 @@
         var circleSizeIncreaseOutput = document.getElementById("circleSizeIncreaseOutput");
         var colorChangeSlider = document.getElementById("colorChangeSlider");
         var colorChangeOutput = document.getElementById("colorChangeOutput");
-        var heatSize = parseInt(heatSizeSliderOutput.innerHTML);
-        var yellowValue = parseInt(cirleColorOutput.innerHTML);
-        var heatGrowthFactor = parseInt(circleSizeIncreaseOutput.innerHTML);
-        var colorChangeFactor = parseInt(colorChangeOutput.innerHTML);
+        var heatSize = 0;//parseInt(heatSizeSliderOutput.innerHTML);
+        var yellowValue = 0;//parseInt(cirleColorOutput.innerHTML);
+        var heatGrowthFactor = 0;//parseInt(circleSizeIncreaseOutput.innerHTML);
+        var colorChangeFactor = 0;//parseInt(colorChangeOutput.innerHTML);
+        // cross hair clicks at top corner of image. offsets to set crosshair to center of image.
+        var xOffSet = 10;
+        var yOffSet = 8;
 
 
 
@@ -241,66 +336,74 @@
 
 
         //try var blahblah = then the next line so you can use that to get the value of slider bar
-        document.getElementById("cirleSizeSlider").oninput = function () {
-
-            var slider = document.getElementById("cirleSizeSlider");
-            var output = document.getElementById("circleSizeOutput");
-            output.innerHTML = slider.value;
-
-            slider.oninput = function () {
-                output.innerHTML = this.value;
+        //<img src='images/items/greenBat.png'</img>
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
             }
+        }
 
-        };
+        function history() {
+            // console.log(loadedImagesAvailableForSelection[locations[0].lootItemName]);
+            
+            var fillHtmlLocations = "<table> <tr> <th>Loot</th> </tr>";
+            locations.forEach(function (item, j) {
+                var temporaryImageSelctionNumber = locations[j].lootItemName;
+                fillHtmlLocations += "<tr>";
+                fillHtmlLocations += "<td>";
+                fillHtmlLocations +=  "<img onmouseover='highlightImage(";
+                fillHtmlLocations += j;
+                fillHtmlLocations +=")' onmouseout='clearHighlight("
+                fillHtmlLocations += j;
+                fillHtmlLocations += ")' src='";
+                // fillHtmlLocations += loadedImagesAvailableForSelection[locations[j].lootItemName];
+                fillHtmlLocations += locations[j].imagePath[temporaryImageSelctionNumber];
+                //fillHtmlLocations += '"onmouseover='foo()";
+                fillHtmlLocations += "'</img>";
+                fillHtmlLocations += "</td>";
+                fillHtmlLocations += "<td>";
+                fillHtmlLocations += "<img src='images/items/redX.png' onclick='removeLocation("
+                fillHtmlLocations += j;
+                fillHtmlLocations +=")'</img>";
+                //fillHtmlLocations += "<img src='images/items/redX.png'</img>";
+                fillHtmlLocations += "</td>";
+                fillHtmlLocations += "</tr>";
+            });
+            fillHtmlLocations += "</table>"
+            console.log(fillHtmlLocations);
+            document.getElementById("locationsTable").innerHTML = fillHtmlLocations;
+        }
 
-        document.getElementById("cirleColorSlider").oninput = function () {
+        function highlightImage(num){
+            console.log(locations[num].xValue - xOffSet, locations[num].yValue -yOffSet)
+            highlightCanvas.arc(locations[num].xValue + 2, locations[num].yValue + 2 ,21 , 0, 2 * Math.PI);
+            highlightCanvas.fillStyle = 'rgba(250, 250, 250, 0.2)';
+            highlightCanvas.fill();
+        }
+        function clearHighlight(num){
+            highlightCanvas.clearRect(0, 0, 1587, 831);
+            highlightCanvas.beginPath();
+            drawOnInitialLoad();
+        }
 
-            var slider = document.getElementById("cirleColorSlider");
-            var output = document.getElementById("cirleColorOutput");
-            output.innerHTML = slider.value;
-
-            slider.oninput = function () {
-                output.innerHTML = this.value;
-            }
-
-        };
-
-        document.getElementById("heatSensitivitySlider").oninput = function () {
-
-            var slider = document.getElementById("heatSensitivitySlider");
-            var output = document.getElementById("heatSensitivityOutput");
-            output.innerHTML = slider.value;
-
-            slider.oninput = function () {
-                output.innerHTML = this.value;
-            }
-
-        };
-
-        document.getElementById("circleSizeIncreaseSlider").oninput = function () {
-
-            var slider = document.getElementById("circleSizeIncreaseSlider");
-            var output = document.getElementById("circleSizeIncreaseOutput");
-            output.innerHTML = slider.value;
-
-            slider.oninput = function () {
-                output.innerHTML = this.value;
-            }
-
-        };
-
-        document.getElementById("colorChangeSlider").oninput = function () {
-
-            var slider = document.getElementById("colorChangeSlider");
-            var output = document.getElementById("colorChangeOutput");
-            output.innerHTML = slider.value;
-
-            slider.oninput = function () {
-                output.innerHTML = this.value;
-            }
-
-        };
-
+        function removeLocation(num){
+            locations.splice(num,1);
+            localStorage.setItem('customsTextValues', JSON.stringify(locations));
+            context.clearRect(0, 0, 1587, 831);
+            context.beginPath();
+            drawOnInitialLoad();
+            history();
+        }
 
         function reset() {
             if (confirm('Are you sure you want to reset your map?')) {
@@ -314,42 +417,52 @@
 
         }
        
-
-        
+        function imageSet(imageNumber){
+            unique = imageNumber;
+            // imageURL[unique];
+            const element = document.getElementById("currentlySelectedSticker");
+            console.log(imageURL[unique])
+            element.innerHTML ="Current Image" + "<br>" + "<img src = " + imageURL[unique] + ">" ;
+        }
+         
         function drawLocation(event, canvas) {
-            const rectangle = mapArea.getBoundingClientRect();
+           const rectangle = mapArea.getBoundingClientRect();
             
             var location = {
                 xValue: event.clientX - rectangle.left,
                 yValue: event.clientY - rectangle.top, 
                 color: yellowValue, 
                 size: heatSize,
-                imagePath: userSelection.lootItemPath,
-                lootItemName: userSelection.lootItemName
+                imagePath: imageURL,
+                lootItemName: unique 
             };
             locations.push(location)
             localStorage.setItem('customsTextValues', JSON.stringify(locations));
             var locationToDraw = locations[locations.length - 1];
-            context.drawImage(img, locationToDraw.xValue -10, locationToDraw.yValue -8);
+            context.drawImage(loadedImagesAvailableForSelection[unique], locationToDraw.xValue -xOffSet, locationToDraw.yValue -xOffSet);
+            history()
         }
 
         //what the user currently has selected
-        var userSelection = {
-            lootItemName: 'GPU',
-            lootItemPath: 'images/items/GPU4.png'
-        };
+        
+        // var graphicsCard = {
+        //     lootItemName: 'graphicsCard',
+        //     lootItemPath: 'images/items/GPU4.png'};
+        // var greenBat = {
+        //     lootItemName: 'greenBat',
+        //     lootItemPath: 'images/items/greenBat.png'};
+        // var physicalBitcoin = {
+        //     lootItemName:'physicalBitcoin',
+        //     lootItemPath:'images/items/physicalBitcoin.png'};
 
-        function imageSet(imagePath){
-            userSelection.lootItemPath = imagePath;
-            img.src = userSelection.lootItemPath;
-        }
 
+        
 
         function drawOnInitialLoad(){
             console.log("array on initail load", locations);
             console.log("insde on load");
             locations.forEach(function (item, j) {
-                context.drawImage(img, locations[j].xValue, locations[j].yValue);
+                context.drawImage(loadedImagesAvailableForSelection[locations[j].lootItemName], locations[j].xValue - xOffSet, locations[j].yValue -yOffSet);
             });
         }
 
@@ -372,7 +485,7 @@
                     //return comparedNumber >= min && comparedNumber <= max;
 
                 }
-                //console.log(between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue));
+            
                 if (between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue) && between(locations[locations.length - 1].yValue, minimumYValue, maximumYValue)) {
                     //console.log(locations[locations.length - 1].xValue);
                     yellowValue = yellowValue - colorChangeFactor;
@@ -392,8 +505,24 @@
 
         }
 
-        var img = new Image();
-            img.src = "images/items/GPU4.png"
+        var imageURL = ['images/items/GPU4.png', 'images/items/greenBat.png', 'images/items/physicalBitcoin.png', 'images/items/ledx.png', 'images/items/aesa.png', 'images/items/defib.png','images/items/intel.png', 'images/items/mfilter.png', 'images/items/mtube.png', 'images/items/vpx.png'];
+        var loadedImagesAvailableForSelection = [];
+        var imageCount = 0;
+
+
+
+        imageURL.forEach(src => {
+            const image = new Image();
+            image.src = src;
+            image.onload = () => {
+                imageCount += 1;
+                if(imageCount === imageURL.length){
+                    imagesLoaded();
+                }
+            }
+            loadedImagesAvailableForSelection.push(image);
+        });
+        
 
         if (localStorage.getItem('customsTextValues') == null) {
             var locations = [];
@@ -405,8 +534,10 @@
         }
 
 
-        img.onload = function(){
+        function imagesLoaded(){
+            console.log("vail4load",loadedImagesAvailableForSelection)
             drawOnInitialLoad();
+            history();
             myCanvas.addEventListener("click", drawLocation);
         }
 
