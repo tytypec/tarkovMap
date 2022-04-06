@@ -1,396 +1,470 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Tarkov Map Interchange</title>
-        <style>
-            
-            body{
-                background-image: url("/images/sunset.png");
-                display: flex;
-            }
-            #mainContainer{
-                margin-left: 20px;
-                width: 95%;
-                position: absolute;
-            
-            }
-            .topBar{
-                overflow: hidden;
-                background-color: rgba(0, 0, 0, 0.589);
-                margin-bottom: 10px; 
-            }
 
-            .topBar a {
-                float: left;
-                color: #f2f2f2;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                font-size: 17px;
-            }
+<head>
+    <title>Tarkov Map Interchange</title>
+    <style>
+        body {
+            background-image: url("/images/sunset.png");
+            display: flex;
+        }
 
-            .topBar a:hover {
-                background-color: #ddd;
-                color: black;
-            }
-            .topBar a.active {
-                background-color: #74664d;
-                color: white;
-            }
+        #mainContainer {
+            margin-left: 20px;
+            width: 95%;
+            position: absolute;
 
-            #contentContainer{
-                background-color: rgba(0, 0, 0, 0.589);
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-            }
-            #imageAndCanvas{
-                
-            }
-            #myCanvas{
+        }
+
+        .topBar {
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.589);
+            margin-bottom: 10px;
+        }
+
+        .topBar a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .topBar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topBar a.active {
+            background-color: #74664d;
+            color: white;
+        }
+
+        #contentContainer {
+            background-color: rgba(0, 0, 0, 0.589);
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        #imageAndCanvas {}
+
+        #myCanvas {
             position: absolute;
             border-color: aquamarine;
-            }
-            button{
-                margin-top: 50px;
-            }
-            #sideBar{
+        }
+
+        button {
+            margin-top: 50px;
+        }
+
+        #sideBar {
+            color: rgba(146, 146, 150, 0.752);
+            background-color: rgba(34, 26, 23, 0.989);
+            text-align: center;
+            width: 133px;
+            margin-top: 5px;
+            display: flex;
+            flex-direction: column;
+            line-height: .9;
+            align-items: center;
+        }
+        #currentlySelectedSticker {
+            margin-bottom: 10px;
+            border-style: none;
+            padding: 5px;
+
+        }
+
+        .slideContainer {
+            padding: 2px;
+            border-style: solid;
+
+
+        }
+
+        #resetButton{
+                background-color: rgba(0, 0, 0, 0.889); 
                 color: rgb(146, 146, 150);
-                background-color: rgba(34, 26, 23, 0.989);
-                text-align: center;
-                margin-top: 5px;
-                border-color: red;
-                display: flex;
-                flex-direction: column;
-                line-height: .9;
+                width: 100px;
+            }
+            #resetButton:hover{
+                background-color: rgba(105, 23, 23, 0.527);
             }
 
-            .slideContainer{
-                padding: 2px;
-                border-style: solid;
+        #imageAndCanvas {
+            margin-right: 10px;
+        }
 
+        .keyInfo {
+            text-align: center;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            line-height: 1;
+            position: relative;
+        }
 
-            }
-            #imageAndCanvas{
-                margin-right: 10px;
+        .keyInfo span {
+            display: none;
+        }
+
+        .keyInfo:hover span {
+            line-height: 1.4;
+            position: absolute;
+            display: inline-block;
+            left: 0px;
+            top: 18px;
+            padding: 5px;
+            background-color: rgb(0, 0, 0, 1);
+            color: rgb(255, 255, 255);
+        }
+
+        .bottomBar {
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.589);
+            margin-top: 10px;
+        }
+
+        .bottomBar a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .bottomBar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .bottomBar a.active {
+            background-color: #74664d;
+            color: white;
+        }
+        .sideBarTitle{
+            font-size: x-large;
+            margin-bottom: 10px;
+        }
+        #locationsTable{
+            border-style: solid;
+            padding: 8px;
+            margin-left: 10px;
+            margin-right: 10px;
+            width: 90px;
+            max-height:400px;
+            overflow-y:auto;
+        }
+
+        ::-webkit-scrollbar {
+             width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.589); 
+        }
+        ::-webkit-scrollbar-thumb {
+             background: rgb(146, 146, 150); 
+        }
+
+        .dropbtn {
+            background-color: #3d362f00;
+            margin-top: 0px;
+            margin-bottom: 20px;
+            color: #888787;
+            color: rgba(54, 54, 54, 0.342);
+            padding: 12px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+
+            .dropbtn:hover, .dropbtn:focus {
+            background-color: #4b4b4b;
+        }
+
+            .dropdown {
+            color: #747474;
+            position: relative;
+            display: inline-block;
+        }
+
+            .dropdown-content {
+            display: none;
+            margin-top: -19.5px;
+            margin-left: -14px;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.889);
+            min-width: 107px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {background-color: #ddd}
+
+            .show {display:block;}
+            
+            ul{
+            list-style-type: none;
+            columns: 2;
+            margin: 0;
+            padding: 0;
             }
 
-            .keyInfo {
-                text-align: center;
-                margin-top: 4px;
-                margin-bottom: 4px;
-                line-height: 1;
-                position: relative;
+            #currentlySelectedSticker{
+            margin-top: 20px;
+            line-height: 1.8;
+            font-size: 17px;
+            font-weight: bold;
             }
-            .keyInfo span {
-                display: none;
-            }
-                
-            .keyInfo:hover span {
-                line-height: 1.4;
-                position: absolute;
-                display: inline-block;
-                left: 0px;
-                top: 18px;
-                padding: 5px;
-                background-color: rgb(0, 0, 0, 1);
-                color: rgb(255, 255, 255);
-            }
-            .bottomBar{
-                overflow: hidden;
-                background-color: rgba(0, 0, 0, 0.589);
-                margin-top: 10px; 
-            }
-            .bottomBar a{
-                float: left;
-                color: #f2f2f2;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                font-size: 17px;
-            }
-            .bottomBar a:hover {
-                background-color: #ddd;
-                color: black;
-            }
-            .bottomBar a.active {
-                background-color: #74664d;
-                color: white;
-            }
-        </style>
-    </head>
 
-    <body>
-        <div id="mainContainer">
-            <div class="topBar">
-                <a href="/index.html">Home</a>
-                <a href="/customs.html">Customs</a>
-                <a class="active" href="/interchange.html">Interchange</a>
-                <a href="/lighthouse.html">Lighthouse</a>
-                <a href="/reserve.html">Reserve</a>
-                <a href="/shoreline.html">Shoreline</a>
-                <a href="/woods.html">Woods</a>
-                <a href="/about.html">About</a>
-            </div>
-            <div id="contentContainer">
-                <div id="imageAndCanvas">
-                    <canvas id="myCanvas" width=1587 height=990 style="cursor:crosshair"></canvas>
-                    <img src="/images/interchange.png" width=1590 height=993 alt="The map didn't load">
-                    
-                    <!--<img id="map" src="images/interchange.png" width=1590 height=834 alt="The map didn't load">-->
-                </div>
-                <div id="sideBar">
-                    <div class="slidecontainer">
-                        <!--<button id="circleSizeAbout" title="I Show up on Hover">Circle Size</button> <br> -->
-                        <div class="keyInfo">Circle size: <span>This value changes initial size of circle.</span></div>
-                        <input type="range" min="6" max="80" value="40" class="slider" id="cirleSizeSlider">
-                        <p>Value: <span id="circleSizeOutput">40</span></p>
-                    </div>
-                    <div class="slidecontainer">
-                        <div class="keyInfo">Circle size increase: <span>This value increase the size of a new circle if it is close to another circle.</span> </div>
-                        <input type="range" min="0" max="6" value="0" class="slider" id="circleSizeIncreaseSlider">
-                        <p>Value: <span id="circleSizeIncreaseOutput">0</span></p>
-                    </div>
-                    <div class="slidecontainer">
-                        <div class="keyInfo">Initial circle color: <span> The starting color of placed cirle lower value will be more red.</span></div>
-                        <input type="range" min="1" max="222" value="222" class="slider" id="cirleColorSlider">
-                        <p>Value: <span id="cirleColorOutput">222</span></p>
-                    </div>
-                    <div class="slidecontainer">
-                        <div class="keyInfo">Color change: <span>This value will add red color when a new circle is placed near previously placed circle.</span></div>
-                        <input type="range" min="0" max="80" value="60" class="slider" id="colorChangeSlider">
-                        <p>Value: <span id="colorChangeOutput">60</span></p>
-                    </div>
-                    <div class="slidecontainer">
-                        <div class="keyInfo">Sensativity: <span>This value governs how close a newly placed cirle needs to be for the 'Circle size increase' and 'Color change' to take effect. </span> </div>
-                        <input type="range" min="10" max="200" value="40" class="slider" id="heatSensitivitySlider">
-                        <p>Value: <span id="heatSensitivityOutput">40</span></p>
-                    </div>
+    </style>
+</head>
 
-                    <button onclick="reset()">Reset</button>
-                </div>    
-                    
-            </div>
-            <div class="bottomBar">
-                <a href="/index.html">Home</a>
-            </div>
+<body>
+    <div id="mainContainer">
+        <div class="topBar">
+            <a href="/index.html">Home</a>
+            <a href="/customs.html">Customs</a>
+            <a class="active" href="/index.html">Interchange</a>
+            <a href="/lighthouse.html">Lighthouse</a>
+            <a href="/reserve.html">Reserve</a>
+            <a href="/shoreline.html">Shoreline</a>
+            <a href="/woods.html">Woods</a>
+            <a href="/about.html">About</a>
         </div>
-    
+        <div id="contentContainer">
+            <div id="imageAndCanvas">
+                <canvas id="highlightCanvas" width=1590 height=993 style="cursor:crosshair; position: absolute;"></canvas>
+                <canvas id="myCanvas" width=1590 height=993 style="cursor:crosshair"></canvas>
+                <img src="images/interchange.png" width=1590 height=993 alt="The map didn't load">
 
-        <script>
-            //var heatSize = 40;
-            //var yellowValue = 222;
-            var mapArea = document.getElementById('myCanvas');
-            var context = mapArea.getContext('2d');
-            var heatSizeSlider = document.getElementById("heatSizeSlider");
-            var heatSizeSliderOutput = document.getElementById("circleSizeOutput");
-            var circleColorSlider = document.getElementById("cirleColorSlider");
-            var cirleColorOutput = document.getElementById("cirleColorOutput");
-            var heatSensitivitySlider = document.getElementById("heatSensitivitySlider");
-            var heatSensitivityOutput = document.getElementById("heatSensitivityOutput");
-            var circleSizeIncreaseSlider = document.getElementById("circleSizeIncreaseSlider");
-            var circleSizeIncreaseOutput = document.getElementById("circleSizeIncreaseOutput");
-            var colorChangeSlider = document.getElementById("colorChangeSlider");
-            var colorChangeOutput = document.getElementById("colorChangeOutput");
-            var heatSize = parseInt(heatSizeSliderOutput.innerHTML);
-            var yellowValue = parseInt(cirleColorOutput.innerHTML);
-            var heatGrowthFactor = parseInt(circleSizeIncreaseOutput.innerHTML);
-            var colorChangeFactor = parseInt(colorChangeOutput.innerHTML);
-            
-            //see  function colorShift() for heatSensitivity declaration
-            //let heatSensitivity = 100
-            
-            //var smooch = document.getElementById("cirleSizeSlider").value;
-            
-            //resizes canvas and image to container size. issue with coordinates on resize
+            </div>
             
 
-            //try var blahblah = then the next line so you can use that to get the value of slider bar
-            document.getElementById("cirleSizeSlider").oninput = function(){
-                
-                var slider = document.getElementById("cirleSizeSlider");
-                var output = document.getElementById("circleSizeOutput");
-                output.innerHTML = slider.value;
-
-                slider.oninput = function() {
-                output.innerHTML = this.value;
-                }
-                
-            };
-
-            document.getElementById("cirleColorSlider").oninput = function(){
-                
-                var slider = document.getElementById("cirleColorSlider");
-                var output = document.getElementById("cirleColorOutput");
-                output.innerHTML = slider.value;
-
-                slider.oninput = function() {
-                output.innerHTML = this.value;
-                }
-                
-            };
-
-            document.getElementById("heatSensitivitySlider").oninput = function(){
-                
-                var slider = document.getElementById("heatSensitivitySlider");
-                var output = document.getElementById("heatSensitivityOutput");
-                output.innerHTML = slider.value;
-
-                slider.oninput = function() {
-                output.innerHTML = this.value;
-                }
-                
-            };
-
-            document.getElementById("circleSizeIncreaseSlider").oninput = function(){
-                
-                var slider = document.getElementById("circleSizeIncreaseSlider");
-                var output = document.getElementById("circleSizeIncreaseOutput");
-                output.innerHTML = slider.value;
-
-                slider.oninput = function() {
-                output.innerHTML = this.value;
-                }
-                
-            };
-
-            document.getElementById("colorChangeSlider").oninput = function(){
-                
-                var slider = document.getElementById("colorChangeSlider");
-                var output = document.getElementById("colorChangeOutput");
-                output.innerHTML = slider.value;
-
-                slider.oninput = function() {
-                output.innerHTML = this.value;
-                }
-                
-            };
-            
-
-            function reset(){
-                if (confirm('Are you sure you want to reset your map?')) {
-                    localStorage.removeItem("interchangeTextValues");
-                    //localStorage.clear();
-                    console.log("you clicked reset")
-                    window.location.reload();
-                } else {
-
-                }
-
-            }
-
-        
-            if(localStorage.getItem('interchangeTextValues') == null){
-            var locations=[];
-            }
-            else{
-            locations =  JSON.parse(localStorage.getItem('interchangeTextValues'));
-            deathLocation("initialLoad");
-            }
-
-
-            
-            
-            function storeCooridnate(xValue, yValue, array, color, size){
-                array.push({xValue, yValue, color, size});
-                localStorage.setItem('interchangeTextValues', JSON.stringify(array));
-            }
-
-                
-            function printMousePos(event, canvas) {
-                const rectangle = mapArea.getBoundingClientRect();
-                storeCooridnate(event.clientX - rectangle.left, event.clientY - rectangle.top, locations, yellowValue, heatSize);
-                console.log(locations);
-                deathLocation("normal");
-            }
-
-            function deathLocation(type){
-
-
-
-                    if (type === "initialLoad"){
-                        locations.forEach(function(item,j){
-                            var colorHolder = 'rgba(245, ' + locations[j].color + ', 0, 0.2)'
-                            context.beginPath();
-                            context.arc(locations[j].xValue, locations[j].yValue, locations[j].size, 0, 2 * Math.PI);
-                            context.fillStyle = colorHolder;
-                            context.stroke();
-                            context.fill();
-                        }
-                    )
-                    } 
-                    else {
-                        colorShift()
-                        var colorHolder = 'rgba(245, ' + yellowValue + ', 0, 0.2)'
-                        //context.fillText("x",locations[locations.length - 1].xValue, locations[locations.length - 1].yValue);
-                        //context.font = "bold 30px Arial";
-                        context.beginPath();
-                        context.arc(locations[locations.length - 1].xValue, locations[locations.length - 1].yValue, heatSize, 0, 2 * Math.PI);
-                        context.fillStyle = colorHolder;
-                        context.stroke();
-                        context.fill();
-                    }
-            }
-
-            function colorShift(){
-                var heatGrowthFactor = parseInt(circleSizeIncreaseOutput.innerHTML);
-                var colorChangeFactor = parseInt(colorChangeOutput.innerHTML);
-
-                    locations.forEach(function(item,i) {
-                        var heatSensitivity =  parseInt(heatSensitivityOutput.innerHTML);
-                        console.log(heatSensitivity);
-                    let minimumXValue = (locations[i].xValue - heatSensitivity)
-                    let maximumXValue = (locations[i].xValue + heatSensitivity)
-                    let minimumYValue = (locations[i].yValue - heatSensitivity)
-                    let maximumYValue = (locations[i].yValue + heatSensitivity)
-
-                    function between(comparedNumber,min,max){
-                    // console.log("here",comparedNumber, min, max);
-                        return ((comparedNumber-min)*(comparedNumber-max) <= 0);   
-                        //return comparedNumber >= min && comparedNumber <= max;
-                        
-                    }
-                    //console.log(between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue));
-                        if (between(locations[locations.length - 1].xValue, minimumXValue, maximumXValue) && between(locations[locations.length - 1].yValue, minimumYValue, maximumYValue)){
-                            //console.log(locations[locations.length - 1].xValue);
-                            yellowValue = yellowValue - colorChangeFactor;
-                            heatSize = heatSize + heatGrowthFactor;
-                            console.log(heatGrowthFactor);
-                        //console.log("inside function ", yellowValue);
-                            return yellowValue;
-                        } 
-                        else {
-                            //heatSize = 40;
-                            //yellowValue = 222;
-                            yellowValue = parseInt(cirleColorOutput.innerHTML);
-                            heatSize = parseInt(heatSizeSliderOutput.innerHTML);
-                        }
+            <div id="sideBar">
+                <div id="currentlySelectedSticker">
+                    Current Image <br> <img src = images/items/GPU4.png>
+                </div>
+                <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn" style="color: rgb(146, 146, 150); border-style: solid;">Select Image</button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <ul>
+                                <li><a onclick="imageSet('0')"><img src="images/items/GPU4.png" onclick="imageSet('0')"></a></li>
+                                <li><a onclick="imageSet('1')"><img src="images/items/greenBat.png" onclick="imageSet('1')"></a></li>
+                                <li><a onclick="imageSet('2')"><img src="images/items/physicalBitcoin.png" onclick="imageSet('2')"></a></li>
+                                <li><a onclick="imageSet('3')"><img src="images/items/ledx.png" onclick="imageSet('3')"></a></li>
+                                <li><a onclick="imageSet('4')"><img src="images/items/aesa.png" onclick="imageSet('4')"></a></li>
+                                <li><a onclick="imageSet('5')"><img src="images/items/defib.png" onclick="imageSet('5')"></a></li>
+                                <li><a onclick="imageSet('6')"><img src="images/items/intel.png" onclick="imageSet('6')"></a></li>
+                                <li><a onclick="imageSet('7')"><img src="images/items/mfilter.png" onclick="imageSet('7')"></a></li>
+                                <li><a onclick="imageSet('8')"><img src="images/items/mtube.png" onclick="imageSet('8')"></a></li>
+                                <li><a onclick="imageSet('9')"><img src="images/items/vpx.png" onclick="imageSet('9')"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                <div class="sideBarTitle">History</div>
+                <div id="locationsTable">
+                    <table> 
+                        <tr>
+                            <th>Loot</th>
+                        </tr>
+                    </table>
+                </div>
+                <button id="resetButton" onclick="reset()">Reset</button>
+            </div>    
                     
-                    });
+           
+
+        </div>
+        <div class="bottomBar">
+            <a href="/index.html">Home</a>
+        </div>
+    </div>
+
+
+    <script>
+        var unique = "0";
+        var mapArea = document.getElementById('myCanvas');
+        var context = mapArea.getContext('2d');
+        var highlightArea = document.getElementById('myCanvas');
+        var highlightCanvas = highlightArea.getContext('2d');
+
+        var heatSize = 0;//parseInt(heatSizeSliderOutput.innerHTML);
+        var yellowValue = 0;//parseInt(cirleColorOutput.innerHTML);
+        var heatGrowthFactor = 0;//parseInt(circleSizeIncreaseOutput.innerHTML);
+        var colorChangeFactor = 0;//parseInt(colorChangeOutput.innerHTML);
+        // cross hair clicks at top corner of image. offsets to set crosshair to center of image.
+        var xOffSet = 10;
+        var yOffSet = 8;
+
+
+
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+
+        function history() {
+            var fillHtmlLocations = "<table> <tr> <th>Loot</th> </tr>";
+            locations.forEach(function (item, j) {
+                var temporaryImageSelctionNumber = locations[j].lootItemName;
+                fillHtmlLocations += `<tr> <td> <img onmouseover='highlightImage(${j})' onmouseout='clearHighlight(${j})' src='${locations[j].imagePath[temporaryImageSelctionNumber]}'`;
+                //fillHtmlLocations += locations[j].imagePath[temporaryImageSelctionNumber];
+                fillHtmlLocations += `'</img> </td> <td> <img src='images/items/redX.png' onclick='removeLocation(${j})'</img> </td> </tr>`;
+            });
+            fillHtmlLocations += "</table>"
+            document.getElementById("locationsTable").innerHTML = fillHtmlLocations;
+        }
+
+
+        function highlightImage(num){
+            highlightCanvas.arc(locations[num].xValue + 2, locations[num].yValue + 2 ,21 , 0, 2 * Math.PI);
+            highlightCanvas.fillStyle = 'rgba(250, 250, 250, 0.2)';
+            highlightCanvas.fill();
+        }
+
+
+        function clearHighlight(num){
+            highlightCanvas.clearRect(0, 0, 1587, 831);
+            highlightCanvas.beginPath();
+            drawOnInitialLoad();
+        }
+
+
+        function removeLocation(num){
+            locations.splice(num,1);
+            localStorage.setItem('interchangeTextValues', JSON.stringify(locations));
+            context.clearRect(0, 0, 1587, 831);
+            context.beginPath();
+            drawOnInitialLoad();
+            history();
+        }
+
+
+        function reset() {
+            if (confirm('Are you sure you want to reset your map?')) {
+                localStorage.removeItem('interchangeTextValues');
+                //localStorage.clear();
+                console.log("you clicked reset")
+                window.location.reload();
+            } else {
 
             }
 
-            myCanvas.addEventListener("click", printMousePos);
-            
-            /*window.addEventListener('resize', onResize);
-            function ifIWantToAddResize(){
-                fitToContainer(mapArea);
+        }
+       
 
-                function fitToContainer(canvas){
-                    var imageAndCanvasContainer = document.getElementById("imageAndCanvas");
-                    var ratio = 3820/1986 
-                    // Make it visually fill the positioned parent
-                    //canvas.style.width ='100%';
-                    //canvas.style.height='100%';
-                    // ...then set the internal size to match
-                    canvas.width  = imageAndCanvasContainer.offsetWidth;
-                    canvas.height = imageAndCanvasContainer.offsetWidth / ratio;
+        function imageSet(imageNumber){
+            unique = imageNumber;
+            const element = document.getElementById("currentlySelectedSticker");
+            console.log(imageURL[unique])
+            element.innerHTML ="Current Image" + "<br>" + "<img src = " + imageURL[unique] + ">" ;
+        }
+         
+
+        function drawLocation(event, canvas) {
+           const rectangle = mapArea.getBoundingClientRect();
+            
+            var location = {
+                xValue: event.clientX - rectangle.left,
+                yValue: event.clientY - rectangle.top, 
+                color: yellowValue, 
+                size: heatSize,
+                imagePath: imageURL,
+                lootItemName: unique 
+            };
+            locations.push(location)
+            localStorage.setItem('interchangeTextValues', JSON.stringify(locations));
+            var locationToDraw = locations[locations.length - 1];
+            context.drawImage(loadedImagesAvailableForSelection[unique], locationToDraw.xValue -xOffSet, locationToDraw.yValue -xOffSet);
+            history()
+        }
+
+        function drawOnInitialLoad(){
+            locations.forEach(function (item, j) {
+                context.drawImage(loadedImagesAvailableForSelection[locations[j].lootItemName], locations[j].xValue - xOffSet, locations[j].yValue -yOffSet);
+            });
+        }
+
+        var imageURL = ['images/items/GPU4.png', 'images/items/greenBat.png', 'images/items/physicalBitcoin.png', 'images/items/ledx.png', 'images/items/aesa.png', 'images/items/defib.png','images/items/intel.png', 'images/items/mfilter.png', 'images/items/mtube.png', 'images/items/vpx.png'];
+        var loadedImagesAvailableForSelection = [];
+        var imageCount = 0;
+
+
+
+        imageURL.forEach(src => {
+            const image = new Image();
+            image.src = src;
+            image.onload = () => {
+                imageCount += 1;
+                if(imageCount === imageURL.length){
+                    imagesLoaded();
                 }
-                function onResize(){
-                    fitToContainer(mapArea);
-                    deathLocation("initialLoad");
-                }
-            }*/
-        </script>
-    </body>
+            }
+            loadedImagesAvailableForSelection.push(image);
+        });
+        
+
+        if (localStorage.getItem('interchangeTextValues') == null) {
+            var locations = [];
+        }
+        else {
+            console.log("loading from local storage")
+            locations = JSON.parse(localStorage.getItem('interchangeTextValues'));
+            //drawLocation("initialLoad");
+        }
+
+
+        function imagesLoaded(){
+            console.log("Images loaded",loadedImagesAvailableForSelection)
+            drawOnInitialLoad();
+            history();
+            myCanvas.addEventListener("click", drawLocation);
+        }
+
+        /*window.addEventListener('resize', onResize);
+        function ifIWantToAddResize(){
+            fitToContainer(mapArea);
+
+            function fitToContainer(canvas){
+                var imageAndCanvasContainer = document.getElementById("imageAndCanvas");
+                var ratio = 3820/1986 
+                // Make it visually fill the positioned parent
+                //canvas.style.width ='100%';
+                //canvas.style.height='100%';
+                // ...then set the internal size to match
+                canvas.width  = imageAndCanvasContainer.offsetWidth;
+                canvas.height = imageAndCanvasContainer.offsetWidth / ratio;
+            }
+            function onResize(){
+                fitToContainer(mapArea);
+                drawLocation("initialLoad");
+            }
+        }*/
+    </script>
+</body>
+
 </html>
