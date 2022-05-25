@@ -202,7 +202,7 @@
         }
 
             .dropdown-content a {
-            color: black;
+            color: #888787;
             padding: 12px 16px;
             text-decoration: none;
             display: block;
@@ -225,6 +225,9 @@
             font-size: 17px;
             font-weight: bold;
             }
+            #questDropdown{
+                color: #888787;
+            }
 
     </style>
 </head>
@@ -244,6 +247,7 @@
         <div id="contentContainer">
             <div id="imageAndCanvas">
                 <canvas id="highlightCanvas" width=1587 height=831 style="cursor:crosshair; position: absolute;"></canvas>
+                <canvas id="questCanvas" width=1587 height=831 style="position: absolute;"></canvas>
                 <canvas id="myCanvas" width=1587 height=831 style="cursor:crosshair"></canvas>
                 <img src="images/customsMap.png" width=1590 height=834 alt="The map didn't load">
 
@@ -256,8 +260,8 @@
                     Current Image <br> <img src = images/items/GPU4.png>
                 </div>
                 <div class="dropdown">
-                    <button onclick="myFunction()" class="dropbtn" style="color: rgb(146, 146, 150); border-style: solid;">Select Image</button>
-                        <div id="myDropdown" class="dropdown-content">
+                    <button onclick="imageSelectDropdown()" class="dropbtn" style="color: rgb(146, 146, 150); border-style: solid;">Select Image</button>
+                        <div id="imageDropdown" class="dropdown-content">
                             <ul>
                                 <li><a onclick="imageSet('0')"><img src="images/items/GPU4.png" onclick="imageSet('0')"></a></li>
                                 <li><a onclick="imageSet('1')"><img src="images/items/greenBat.png" onclick="imageSet('1')"></a></li>
@@ -280,6 +284,18 @@
                         </tr>
                     </table>
                 </div>
+                <div class="dropdown">
+                    <button onclick="questSelectDropdown()" class="dropbtn" style="color: rgb(146, 146, 150); border-style: solid;">Quests</button>
+                        <div id="questDropdown" class="dropdown-content">
+                            <ul>
+                                <li><a onclick="questDisplay(location,questIcon)">Debut</a>
+                                <li><a onmouseover="questDisplay(699.5, 416)" onmouseleave="questOffDisplay()">Checking</a>
+                                <li><a onclick="questDisplay(location,questIcon)">Shootout Picnic</a>
+                                <li><a onmouseover="questDisplay(248.5,562)"  onmouseleave="questOffDisplay()">Delivery From The Past</a>
+                                        
+                            </ul>
+                        </div>
+                    </div>
                 <button id="resetButton" onclick="reset()">Reset</button>
             </div>    
                     
@@ -298,6 +314,8 @@
         var context = mapArea.getContext('2d');
         var highlightArea = document.getElementById('myCanvas');
         var highlightCanvas = highlightArea.getContext('2d');
+        var questArea = document.getElementById('questCanvas');
+        var questCanvas = questArea.getContext('2d');
 
         var heatSize = 0;//parseInt(heatSizeSliderOutput.innerHTML);
         var yellowValue = 0;//parseInt(cirleColorOutput.innerHTML);
@@ -306,11 +324,26 @@
         // cross hair clicks at top corner of image. offsets to set crosshair to center of image.
         var xOffSet = 10;
         var yOffSet = 8;
+       // machine key xValue: 699.5, yValue: 416, 
 
+        function imageSelectDropdown() {
+            document.getElementById("imageDropdown").classList.toggle("show");
+        }
 
+        function questSelectDropdown() {
+            document.getElementById("questDropdown").classList.toggle("show");
+        }
 
-        function myFunction() {
-            document.getElementById("myDropdown").classList.toggle("show");
+        function questDisplay(xValue,yValue){
+            questCanvas.arc(xValue, yValue, 21, 0, 2 * Math.PI);
+            questCanvas.fillStyle = 'rgba(250, 0, 0, 0.8)';
+            questCanvas.fill(); 
+        }
+
+        function questOffDisplay(){
+            questCanvas.clearRect(0, 0, 1587, 831);
+            questCanvas.beginPath();
+            drawOnInitialLoad();
         }
 
 
@@ -402,6 +435,7 @@
             var locationToDraw = locations[locations.length - 1];
             context.drawImage(loadedImagesAvailableForSelection[unique], locationToDraw.xValue -xOffSet, locationToDraw.yValue -xOffSet);
             history()
+            console.log(locations);
         }
 
         function drawOnInitialLoad(){
